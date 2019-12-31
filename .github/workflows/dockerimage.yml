@@ -14,6 +14,7 @@ on:
 env:
   # TODO: Change variable to your image's name.
   IMAGE_NAME: typhoon51280/plexanisync
+  IMAGE_VERSION: latest
 
 jobs:
 
@@ -37,13 +38,13 @@ jobs:
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
           # Use Docker `latest` tag convention
           [ "$VERSION" == "master" ] && VERSION=latest
-          echo VERSION=$VERSION
-          echo "::set-output name=version::$VERSION"
+          echo "IMAGE_VERSION=$VERSION"
+          # echo "::set-output name=version::$VERSION"
         
       - name: Build & Push to Docker Hub
         uses: opspresso/action-docker@master
         env:
           USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
           PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
-          TAG_NAME: ${{ steps.github.outputs.version }}
+          TAG_NAME: ${{ IMAGE_VERSION }}
           LATEST: "true"
