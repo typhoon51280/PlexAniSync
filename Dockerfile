@@ -22,4 +22,4 @@ COPY . .
 
 RUN chmod +x runsync.sh
 
-ENTRYPOINT ["runsync.sh"]
+ENTRYPOINT ["./runsync.sh"]
