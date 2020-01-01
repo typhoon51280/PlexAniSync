@@ -164,8 +164,7 @@ def get_watched_shows(shows):
                     season = 1 if not episode.seasonNumber else episode.seasonNumber
                     n_episode = episode.index
                     if episode.isWatched and n_episode:
-                        if (n_episode > episodes_watched and season ==
-                                season_watched) or (season > season_watched):
+                        if (n_episode > episodes_watched and season == season_watched) or (season > season_watched):
                             season_watched = season
                             episodes_watched = n_episode
                             season_total = season
