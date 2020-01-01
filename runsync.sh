@@ -6,7 +6,7 @@ create_settings() {
 }
 
 update() {
-  local show_name = "${1}"
+  local show_name="${1}"
   if [[ -n "${show_name}" ]]; then
     (python TautulliSyncHelper.py "${show_name}")
   else
@@ -15,7 +15,7 @@ update() {
 }
 
 sync() {
-  local loop_interval = "${1}"
+  local loop_interval="${1}"
   if [[ "${loop_interval}" -gt "0" ]]; then
     while true
     do
