@@ -9,8 +9,7 @@ ENV PLEX_SECTION=Anime \
     ANI_USERNAME='' \
     ANI_TOKEN='' \
     ANI_PLEXCOUNT_PRIORITY='False' \
-    ANI_SKIP_LISTUPDATE='False' \
-    INTERVAL=0
+    ANI_SKIP_LISTUPDATE='False'
 
 ENV PATH="${PATH}:~/.local/bin"
 
