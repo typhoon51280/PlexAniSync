@@ -11,7 +11,9 @@ ENV PLEX_SECTION=Anime \
     ANI_PLEXCOUNT_PRIORITY='False' \
     ANI_SKIP_LISTUPDATE='False'
 
-ENV PATH="${PATH}:~/.local/bin"
+ENV PATH=".:${PATH}:~/.local/bin"
+
+RUN apk add --no-cache bash
 
 WORKDIR /plexanisync
 
@@ -22,4 +24,4 @@ COPY . .
 
 RUN chmod +x runsync.sh
 
-ENTRYPOINT ["./runsync.sh"]
+ENTRYPOINT ["runsync.sh"]
