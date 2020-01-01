@@ -1,13 +1,13 @@
-import collections
-import configparser
+# import collections
+# import configparser
 import coloredlogs
-import json
+# import json
 import logging
-import os
+# import os
 import re
-import requests
+# import requests
 import sys
-from guessit import guessit
+# from guessit import guessit
 from plexapi.myplex import MyPlexAccount
 from plexapi.server import PlexServer
 
@@ -33,6 +33,7 @@ def authenticate():
         home_username = plex_settings['home_username']
         home_server_base_url = plex_settings['home_server_base_url']
     except Exception as e:
+        print(e)
         home_user_sync = 'false'
         home_username = ''
         home_server_base_url = ''
@@ -214,7 +215,7 @@ def get_watched_shows(shows):
     if watched_series is not None and len(watched_series) == 0:
         return None
     else:
-         return watched_series
+        return watched_series
 
 
 def get_watched_episodes_for_show_season(
@@ -238,5 +239,5 @@ def get_watched_episodes_for_show_season(
                         (e))
                     pass
 
-    #logger.info('[PLEX] %s episodes watched for season: %s' % (episodes_watched, watched_season))
+    # logger.info('[PLEX] %s episodes watched for season: %s' % (episodes_watched, watched_season))
     return episodes_watched

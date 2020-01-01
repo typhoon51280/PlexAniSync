@@ -1,13 +1,13 @@
 import collections
-import configparser
+# import configparser
 import coloredlogs
 import inflect
 import json
 import logging
-import os
+# import os
 import re
 import requests
-import sys
+# import sys
 from guessit import guessit
 
 import plexmodule
@@ -23,9 +23,10 @@ ANILIST_PLEX_EPISODE_COUNT_PRIORITY = 'false'
 # Set this to True for logging failed AniList matches to failed_matches.txt file
 ANILIST_LOG_FAILED_MATCHES = False
 
+
 def to_object(o):
     keys, values = zip(*o.items())
-    #print(keys, values)
+    # print(keys, values)
     return collections.namedtuple('X', keys)(*values)
 
 
@@ -56,10 +57,12 @@ def int_to_roman_numeral(input):
         input -= ints[i] * count
     return ''.join(result)
 
+
 def log_to_file(message):
-    f=open("failed_matches.txt", "a+")
+    f = open("failed_matches.txt", "a+")
     f.write('%s\n' % (message))
     f.close()
+
 
 class anilist_series:
     def __init__(
@@ -594,13 +597,13 @@ def match_series_with_seasons(
         plex_title,
         plex_year,
         plex_total_seasons):
-        # logger.info('[ANILIST] Plex series has more than 1 season, using alternative season search for total of %s seasons' %
-        #  (plex_total_seasons))
+    # logger.info('[ANILIST] Plex series has more than 1 season, using alternative season search for total of %s seasons' %
+    # (plex_total_seasons))
     counter_season = 1
     counter_season_custom_mapping = 1
     custom_mapping_seasons_anilist_id = 0
     custom_mapping_season_count = 0
-    plex_watched_episode_count_custom_mapping  = 0
+    plex_watched_episode_count_custom_mapping = 0
 
     # Check if we have custom mappings for all seasons (One Piece for example)
     if(plex_total_seasons > 1):
@@ -612,15 +615,15 @@ def match_series_with_seasons(
             elif(matched_id > 0 and custom_mapping_seasons_anilist_id == 0):
                 plex_watched_episode_count_custom_mapping += plexmodule.get_watched_episodes_for_show_season(plex_series_all, plex_title, counter_season_custom_mapping)
                 custom_mapping_season_count += 1
-            
+
             custom_mapping_seasons_anilist_id = matched_id
             counter_season_custom_mapping += 1
 
         # If we had custom mappings for multiple seasons with the same ID use cumulative episode count and skip per season processing
         if(custom_mapping_season_count > 1):
             logger.warning(
-            '[ANILIST] Found same custom mapping id for multiple seasons so not using per season processing but updating as one | title: %s anilist id: %s' %
-            (plex_title, custom_mapping_seasons_anilist_id))
+                '[ANILIST] Found same custom mapping id for multiple seasons so not using per season processing but updating as one | title: %s anilist id: %s' %
+                (plex_title, custom_mapping_seasons_anilist_id))
 
             logger.warning(
                 '[ANILIST] Adding new series id to list: %s | Plex episodes watched for all seasons: %s' %
@@ -630,7 +633,7 @@ def match_series_with_seasons(
             for series in anilist_series:
                 if(custom_mapping_seasons_anilist_id == series.id):
                     matched_anilist_series.append(series)
-            
+
             if matched_anilist_series:
                 update_entry(
                     plex_title,
@@ -837,16 +840,16 @@ def update_entry(
             continue
 
         if hasattr(series, 'started_year'):
-            if year != series.started_year:         
-                if ignore_year == False:
+            if year != series.started_year:
+                if ignore_year is False:
                     logger.error(
                         '[ANILIST] Series year did not match (skipping update) => Plex has %s and AniList has %s' %
                         (year, series.started_year))
                     continue
-                elif ignore_year == True:
+                elif ignore_year is True:
                     logger.info(
-                    '[ANILIST] Series year did not match however skip year check was given so adding anyway => Plex has %s and AniList has %s' %
-                    (year, series.started_year))
+                        '[ANILIST] Series year did not match however skip year check was given so adding anyway => Plex has %s and AniList has %s' %
+                        (year, series.started_year))
 
         anilist_total_episodes = 0
         anilist_episodes_watched = 0
@@ -872,7 +875,7 @@ def update_entry(
             except BaseException:
                 pass
 
-        if watched_episode_count >= anilist_total_episodes and anilist_total_episodes is not 0 and anilist_media_status == 'FINISHED':
+        if watched_episode_count >= anilist_total_episodes and anilist_total_episodes != 0 and anilist_media_status == 'FINISHED':
             # series completed watched
             logger.warning(
                 '[ANILIST] Plex episode watch count [%s] was higher than the one on AniList total episodes for that series [%s] | gonna update AniList entry to completed' %
@@ -892,7 +895,7 @@ def update_entry(
                         current_episodes_watched,
                         "COMPLETED")
                     current_episodes_watched += 1
-        elif watched_episode_count > anilist_episodes_watched and anilist_total_episodes is not 0:
+        elif watched_episode_count > anilist_episodes_watched and anilist_total_episodes != 0:
             # episode watch count higher than plex
             logger.warning(
                 '[ANILIST] Plex episode watch count [%s] was higher than the one on AniList [%s] which has total of %s episodes | gonna update AniList entry to currently watching' %
@@ -918,7 +921,7 @@ def update_entry(
                 logger.info(
                     '[ANILIST] Episodes watched was higher on AniList [%s] than on Plex [%s] however Plex episode count override is active so updating' %
                     (anilist_episodes_watched, watched_episode_count))
-                
+
                 # Since AniList episode count is higher we don't loop thru updating the notification feed and just set the AniList episode count once
                 update_series(series.id, watched_episode_count, "CURRENT")
             else:
@@ -929,14 +932,14 @@ def update_entry(
             logger.info(
                 '[ANILIST] Episodes watched was higher on AniList [%s] than on Plex [%s] so skipping update' %
                 (anilist_episodes_watched, watched_episode_count))
-        elif anilist_total_episodes is 0:
+        elif anilist_total_episodes == 0:
             logger.info(
                 '[ANILIST] AniList total episodes was 0 so most likely invalid data')
 
 
 def find_id_season_best_match(title, season, year):
     media_id = None
-    #logger.warning('[ANILIST] Searching  AniList for title: %s | season: %s' % (title, season))
+    # logger.warning('[ANILIST] Searching  AniList for title: %s | season: %s' % (title, season))
     match_title = re.sub('[^A-Za-z0-9]+', '', title).lower().strip()
     match_year = int(year)
 
@@ -996,7 +999,7 @@ def find_id_season_best_match(title, season, year):
                                 '[^A-Za-z0-9]+', '', title_romaji).lower().strip()
                     if hasattr(media_item.startDate, 'year'):
                         if media_item.startDate.year is not None:
-                             started_year = int(media_item.startDate.year)
+                            started_year = int(media_item.startDate.year)
 
                     for potential_title in potential_titles:
                         potential_title = re.sub(
@@ -1032,7 +1035,7 @@ def find_id_season_best_match(title, season, year):
 
 def find_id_best_match(title, year):
     media_id = None
-    #logger.warning('[ANILIST] Searching  AniList for title: %s' % (title))
+    # logger.warning('[ANILIST] Searching  AniList for title: %s' % (title))
     match_title = re.sub('[^A-Za-z0-9]+', '', title).lower().strip()
     match_year = str(year)
 
@@ -1063,7 +1066,7 @@ def find_id_best_match(title, year):
                         if hasattr(media_item.startDate, 'year'):
                             started_year = str(media_item.startDate.year)
 
-                        #logger.info('Comparing AniList: %s | %s[%s] <===> %s[%s]' % (title_english, title_romaji, started_year, match_title, match_year))
+                        # logger.info('Comparing AniList: %s | %s[%s] <===> %s[%s]' % (title_english, title_romaji, started_year, match_title, match_year))
                         if match_title == title_english_for_matching and match_year == started_year:
                             media_id = media_item.id
                             logger.warning(
@@ -1160,7 +1163,12 @@ def update_series(mediaId, progress, status):
     response = requests.post(
         url, headers=headers, json={
             'query': query, 'variables': variables})
+
+    logger.info(
+        '[ANILIST] update_series: %s' %
+        (response.content))
     # print(response.content)
+
 
 def retrieve_custom_mapping(title, season):
     if custom_mappings:

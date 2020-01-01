@@ -1,16 +1,16 @@
-import collections
+# import collections
 import configparser
 import coloredlogs
-import json
+# import json
 import logging
 import os
-import re
-import requests
+# import re
+# import requests
 import sys
 from time import sleep
-from guessit import guessit
-from plexapi.myplex import MyPlexAccount
-from plexapi.server import PlexServer
+# from guessit import guessit
+# from plexapi.myplex import MyPlexAccount
+# from plexapi.server import PlexServer
 
 import anilist
 import plexmodule
@@ -22,7 +22,7 @@ coloredlogs.install(fmt='%(asctime)s %(message)s', logger=logger)
 # Enable this if you want to also log all messages coming from imported libraries
 # coloredlogs.install(level='DEBUG')
 
-## Settings section ##
+# Settings section #
 
 
 def read_settings(settings_file):
@@ -79,7 +79,7 @@ def read_custom_mappings(mapping_file):
                     '[MAPPING] Invalid entry found for line: %s' %
                     (line))
 
-## Startup section ##
+# Startup section #
 
 
 def start():

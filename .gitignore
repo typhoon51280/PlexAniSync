@@ -15,3 +15,5 @@ failed_matches\.txt
 update_anilist\.bat
 
 update_anilist_test\.bat
+
+/\.vscode/
