@@ -1,6 +1,9 @@
 #!/bin/bash
-echo "Updating settings.ini"
-(python settingsupdater.py)
+
+create_settings() {
+  echo "Generating settings.ini"
+  (python settingsupdater.py)
+}
 
 update() {
   local show_name = "${1}"
@@ -24,11 +27,16 @@ sync() {
   fi
 }
 
-case "$1" in
+echo "parameters: ${@}"
+echo "operation: ${1}"
+
+case "${1}" in
   update)
+    create_settings
     update "${@:2}"
     ;;
   sync)
+    create_settings
     sync "${@:2}"
     ;;
   *)
